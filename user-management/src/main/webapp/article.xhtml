@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<ui:composition template="/template.xhtml">
+
+	<ui:define name="head">
+		<f:metadata>
+			<f:viewParam name="id" value="#{userController.id}" />
+			<f:viewAction action="#{userController.onPageLoad()}" />
+		</f:metadata>
+		
+		<ui:param name="createUser" value="#{userController.id == null}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="articleForm" styleClass="form-horizontal"
+			enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="title" class="col-md-2 control-label">#{messages.title}</label>
+				<div class="col-md-10">
+					<h:inputText id="title" value="#{articleController.article.title}"
+						styleClass="form-control" required="true"
+						validator="#{articleController.validateTitle}">
+						<f:validateLength minimum="2" maximum="50" />	
+						<f:ajax render="userForm:username_message"  />
+					</h:inputText>
+					<h:message id="username_message" for="title" styleClass="text-danger" />
+				</div>
+			</div>
+			
+						<div class="form-group">
+				<label for="content" class="col-md-2 control-label">#{messages.content}</label>
+				<div class="col-md-10">
+					<h:inputTextarea id="content"
+						value="#{articleController.article.content}" styleClass="form-control"
+						required="true">
+						<f:validateLength minimum="5" maximum="5000" />
+					</h:inputTextarea>
+					<h:message for="content" styleClass="text-danger" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="fullName" class="col-md-2 control-label">#{messages.fullname}</label>
+				<div class="col-md-10">
+					<h:inputText id="fullName" value="#{articleController.article.author}"
+						styleClass="form-control" required="true">
+						<f:validateLength minimum="3" maximum="30" />
+					</h:inputText>
+					<h:message for="fullName" styleClass="text-danger" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-md-offset-2 col-md-10">
+					<h:commandButton action="#{userController.save()}"
+						value="#{messages.save}" styleClass="btn btn-primary"
+					 />
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+</html>

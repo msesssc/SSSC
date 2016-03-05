@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<ui:composition template="/template.xhtml">
+
+	<ui:define name="head">
+		<f:metadata>
+			<f:viewParam name="id" value="#{userController.id}" />
+			<f:viewAction action="#{userController.onPageLoad()}" />
+		</f:metadata>
+		
+		<ui:param name="createUser" value="#{userController.id == null}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="userForm" styleClass="form-horizontal"
+			enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="username" class="col-md-2 control-label">#{messages.username}</label>
+				<div class="col-md-10">
+					<h:inputText id="username" value="#{userController.user.username}"
+						styleClass="form-control" required="true"
+						validator="#{userController.validateUsername}">
+						<f:validateLength minimum="3" maximum="15" />
+						<f:ajax render="userForm:username_message"  />
+					</h:inputText>
+					<h:message id="username_message" for="username" styleClass="text-danger" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="password" class="col-md-2 control-label">#{messages.password}</label>
+				<div class="col-md-10">
+					<h:inputSecret id="password"
+						value="#{userController.user.password}" styleClass="form-control"
+						required="true" redisplay="true">
+						<f:validateLength minimum="6" maximum="20" />
+					</h:inputSecret>
+					<h:message for="password" styleClass="text-danger" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="passwordConfirm" class="col-md-2 control-label">#{messages.password_confirm}</label>
+				<div class="col-md-10">
+					<h:inputSecret id="passwordConfirm"
+						value="#{userController.passwordConfirm}" redisplay="true"
+						styleClass="form-control" required="true" />
+					<h:message for="passwordConfirm" styleClass="text-danger" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="email" class="col-md-2 control-label">#{messages.email}</label>
+				<div class="col-md-10">
+					<h:inputText id="email" value="#{userController.user.email}"
+						styleClass="form-control" required="true"
+						validatorMessage="#{messages.email_invalid}">
+						<f:validateRegex pattern="[\w\-\.]+@\w+\.[a-z]+" />
+					</h:inputText>
+					<h:message for="email" styleClass="text-danger" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="fullName" class="col-md-2 control-label">#{messages.fullname}</label>
+				<div class="col-md-10">
+					<h:inputText id="fullName" value="#{userController.user.fullname}"
+						styleClass="form-control" required="true">
+						<f:validateLength minimum="3" maximum="30" />
+					</h:inputText>
+					<h:message for="fullName" styleClass="text-danger" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="image" class="col-md-2 control-label">#{messages.image}</label>
+				<div class="col-md-10">
+					<h:inputFile id="image" value="#{userController.image}"
+						validator="#{userController.validateImage}" />
+					<h:message for="image" styleClass="text-danger" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-offset-2 col-md-10">
+					<h:commandButton action="#{userController.save()}"
+						value="#{messages.save}" styleClass="btn btn-primary"
+					 />
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<ui:composition template="/template.xhtml">
+
+	<ui:define name="head">
+		<f:metadata>
+			<f:viewParam name="page" value="#{userListController.currentPage}" />
+			<f:viewAction action="#{userListController.onPageLoad()}" />
+		</f:metadata>
+
+		<ui:param name="usersList" value="true" />
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="userForm" styleClass="form-horizontal">
+			<h:dataTable id="usersList" value="#{userListController.users}"
+				var="user"
+				styleClass="table table-striped table-hover valign-middle">
+				<h:column>
+					<f:facet name="header">
+						#{messages.username}
+					</f:facet>
+
+					<img src="/user-management/image?id=#{user.id}" class="img-circle "
+						width="60" height="60" alt="" />
+					#{user.username}
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.fullname}			
+					</f:facet>
+					#{user.fullname}
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						#{messages.email}		
+					</f:facet>
+					#{user.email}
+				</h:column>
+				<h:column rendered="#{identityController.loggedIn}">
+					<h:button id="edit" styleClass="btn btn-primary btn-sm btn-mr"
+						value="#{messages.edit}" outcome="user"
+						rendered="#{user.username == identityController.username || identityController.isAdmin()}">
+						<f:param name="id" value="#{user.id}" />
+					</h:button>
+					<h:commandButton id="delete" styleClass="btn btn-danger btn-sm"
+						action="#{userListController.delete(user)}"
+						rendered="#{identityController.isAdmin() and !identityController.isUserAdmin(user.username)}"
+						value="#{messages.delete}">
+						<f:ajax render="userForm:usersList" />
+					</h:commandButton>
+				</h:column>
+			</h:dataTable>
+
+			<nav class="text-center">
+				<ul class="pagination">
+					<li
+						class="#{userListController.currentPage == 1 ? 'disabled' : ''}">
+						<h:link outcome="users"
+							disabled="#{userListController.currentPage == 1}">
+							<span aria-hidden="true">«</span>
+							<f:param name="page"
+								value="#{userListController.currentPage - 1}" />
+						</h:link>
+					</li>
+					
+					<ui:repeat var="current" value="#{userListController.pagerItems}">
+						<li
+							class="#{userListController.currentPage == current ? 'active' : '' }">
+							<h:link outcome="users"
+								disabled="#{userListController.currentPage == current}">
+								<span aria-hidden="true">#{current}</span>
+								<f:param name="page" value="#{current}" />
+							</h:link>
+						</li>
+					</ui:repeat>
+					
+					<li
+						class="#{userListController.currentPage == userListController.pages ? 'disabled' : '' }">
+						<h:link outcome="users"
+							disabled="#{userListController.currentPage == userListController.pages}">
+							<span aria-hidden="true">»</span>
+							<f:param name="page"
+								value="#{userListController.currentPage + 1}" />
+						</h:link>
+					</li>
+
+
+				</ul>
+
+			</nav>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

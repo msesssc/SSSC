@@ -1,0 +1,22 @@
+.btn-mr {
+	margin-right: 10px;
+}
+
+.btn-ml5 {
+	margin-left: 5px;
+}
+
+.nav-text {
+	color: white;
+	margin-right: 10px;
+	margin-top: 5px;
+	font-size: 18px;
+}
+
+.table.valign-middle > tbody > tr > td {
+	vertical-align: middle;
+}
+
+img#profile-picture{
+	max-width: 100%;
+}
