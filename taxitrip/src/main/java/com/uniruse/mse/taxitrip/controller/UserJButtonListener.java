@@ -24,8 +24,8 @@ import com.ibm.db2.jcc.DB2Driver;
 public class UserJButtonListener implements ActionListener {
 	private DriverController controller;
 	private static final String SELECT_ALL_DRIVERS_STMT = "SELECT * FROM driver";
-	private static final String SELECT_ALFA_DRIVERS_STMT = "SELECT * FROM car Where driver";
-	private static final String SELECT_CARS_DRIVED_BY_STMT = "SELECT * FROM driver";
+	private static final String SELECT_ALL_CLIENTS_STMT = "SELECT * FROM client";
+	private static final String SELECT_ALL_CARS_STMT = "SELECT * FROM car";
 
 	/**
 	 * Initialize object.
@@ -46,31 +46,47 @@ public class UserJButtonListener implements ActionListener {
 		if (e.getSource() == controller.getDriverUi().getShowDrivers()) {
 
 			try {
-				DriverManager.registerDriver(new DB2Driver());
-
-				Connection db2Conn = DriverManager.getConnection("jdbc:db2://localhost:50000/gundev", "db2admin",
-						"runners92");
-				db2Conn.createStatement().execute("SET CURRENT SCHEMA gundev");
-				PreparedStatement selectTestDataStatement = db2Conn.prepareStatement(SELECT_ALL_DRIVERS_STMT);
-				ResultSet result = selectTestDataStatement.executeQuery();
+				ResultSet result = getResult(SELECT_ALL_DRIVERS_STMT);
 				controller.getDriverUi().getTable().setModel(buildTableModel(result));
+				controller.getDriverUi().repaint();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-		} else if (e.getSource() == controller.getDriverUi().getAlfaDrivers()) {
+		} else if (e.getSource() == controller.getDriverUi().getShowClients()) {
 			try {
-				DriverManager.registerDriver(new DB2Driver());
-
-				Connection db2Conn = DriverManager.getConnection("jdbc:db2://localhost:50000/gundev", "db2admin",
-						"runners92");
-				db2Conn.createStatement().execute("SET CURRENT SCHEMA gundev");
-				PreparedStatement selectTestDataStatement = db2Conn.prepareStatement(SELECT_ALL_DRIVERS_STMT);
-				ResultSet result = selectTestDataStatement.executeQuery();
+				ResultSet result = getResult(SELECT_ALL_CLIENTS_STMT);
 				controller.getDriverUi().getTable().setModel(buildTableModel(result));
+				controller.getDriverUi().repaint();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} else if (e.getSource() == controller.getDriverUi().getShowCars()) {
+			try {
+				ResultSet result = getResult(SELECT_ALL_CARS_STMT);
+				controller.getDriverUi().getTable().setModel(buildTableModel(result));
+				controller.getDriverUi().repaint();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * Gets query result;
+	 * 
+	 * @param statement
+	 * @return result set
+	 * @throws SQLException
+	 *             ex
+	 */
+	private ResultSet getResult(String statement) throws SQLException {
+		DriverManager.registerDriver(new DB2Driver());
+
+		Connection db2Conn = DriverManager.getConnection("jdbc:db2://localhost:50000/gundev", "db2admin", "123456");
+		db2Conn.createStatement().execute("SET CURRENT SCHEMA gundev");
+		PreparedStatement selectTestDataStatement = db2Conn.prepareStatement(statement);
+		ResultSet result = selectTestDataStatement.executeQuery();
+		return result;
 	}
 
 	/**

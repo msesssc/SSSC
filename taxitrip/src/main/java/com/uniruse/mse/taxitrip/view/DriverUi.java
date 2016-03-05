@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 /**
@@ -21,8 +22,8 @@ import javax.swing.JTable;
 public class DriverUi extends JFrame {
 
 	private JButton showDrivers = new JButton("Show All Drivers");
-	private JButton alfaDrivers = new JButton("Driver with Alfa Romeo");
-	private JButton carsDrivedBy = new JButton("Cars drived by Milen");
+	private JButton showClients = new JButton("Show All Clients");
+	private JButton showCars = new JButton("Show All Cars");
 	private JTable table = new JTable();
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +31,7 @@ public class DriverUi extends JFrame {
 	 * Sets the size and the title of the window.
 	 */
 	public DriverUi() {
-		setBounds(600, 50, 754, 495);
+		setBounds(600, 50, 500, 500);
 		setTitle("Driver information");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		init();
@@ -44,11 +45,17 @@ public class DriverUi extends JFrame {
 		Container container = getContentPane();
 		JPanel btnPanel = new JPanel();
 		btnPanel.add(showDrivers);
-		btnPanel.add(alfaDrivers);
-		btnPanel.add(carsDrivedBy);
+		btnPanel.add(showClients);
+		btnPanel.add(showCars);
 		JPanel infoPanel = new JPanel();
 
-		infoPanel.add(table);
+		// infoPanel.add(table, BorderLayout.CENTER);
+		// infoPanel.add(table.getTableHeader(), BorderLayout.NORTH);
+		// infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.LINE_AXIS));
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(table);
+		infoPanel.add(scrollPane);
 		container.add(btnPanel, BorderLayout.WEST);
 		container.add(infoPanel, BorderLayout.SOUTH);
 
@@ -62,7 +69,8 @@ public class DriverUi extends JFrame {
 	 */
 	public void addEventListener(ActionListener eventListener) {
 		showDrivers.addActionListener(eventListener);
-		alfaDrivers.addActionListener(eventListener);
+		showClients.addActionListener(eventListener);
+		showCars.addActionListener(eventListener);
 	}
 
 	/**
@@ -96,32 +104,16 @@ public class DriverUi extends JFrame {
 	}
 
 	/**
-	 * @return the alfaDrivers
+	 * @return the showClients
 	 */
-	public JButton getAlfaDrivers() {
-		return alfaDrivers;
+	public JButton getShowClients() {
+		return showClients;
 	}
 
 	/**
-	 * @param alfaDrivers
-	 *            the alfaDrivers to set
+	 * @return the showCars
 	 */
-	public void setAlfaDrivers(JButton alfaDrivers) {
-		this.alfaDrivers = alfaDrivers;
-	}
-
-	/**
-	 * @return the carsDrivedBy
-	 */
-	public JButton getCarsDrivedBy() {
-		return carsDrivedBy;
-	}
-
-	/**
-	 * @param carsDrivedBy
-	 *            the carsDrivedBy to set
-	 */
-	public void setCarsDrivedBy(JButton carsDrivedBy) {
-		this.carsDrivedBy = carsDrivedBy;
+	public JButton getShowCars() {
+		return showCars;
 	}
 }
